@@ -1,0 +1,342 @@
+{
+  "generatedUtc": "2026-07-29T11:45:08+00:00",
+  "generatedFiles": [
+    "Data/atlas-data.js",
+    "Data/boundary.json",
+    "Data/shap/festival_pre-mobility.json",
+    "Data/shap/festival_pre-pollution.json",
+    "Data/shap/festival_pre-total_exposure.json",
+    "Data/shap/post_festival-mobility.json",
+    "Data/shap/post_festival-pollution.json",
+    "Data/shap/post_festival-total_exposure.json",
+    "Data/spatial/festival_pre-interaction.json",
+    "Data/spatial/festival_pre-mobility.json",
+    "Data/spatial/festival_pre-pm25.json",
+    "Data/spatial/festival_pre-pollution.json",
+    "Data/spatial/festival_pre-population_activity.json",
+    "Data/spatial/festival_pre-total_exposure.json",
+    "Data/spatial/post_festival-interaction.json",
+    "Data/spatial/post_festival-mobility.json",
+    "Data/spatial/post_festival-pm25.json",
+    "Data/spatial/post_festival-pollution.json",
+    "Data/spatial/post_festival-population_activity.json",
+    "Data/spatial/post_festival-total_exposure.json"
+  ],
+  "sources": [
+    {
+      "path": "Config/chunyun_periods.yaml",
+      "bytes": 500,
+      "sha256": "b053add9be262b648f16546cae4eb2ed9900f92a428f6063180c51b6bbcdf903"
+    },
+    {
+      "path": "Output/Decomposition/grid_level_decomposition.parquet",
+      "bytes": 22336646,
+      "sha256": "3235202c17df79963388090101f6e3c29a40e4f489bf9ac85e41ce25e3319e67"
+    },
+    {
+      "path": "Output/Decomposition/national_summary.csv",
+      "bytes": 566,
+      "sha256": "240132b212e0d90013d23efcaf7dc4891f78f26b6d8dd6099975894514570b8d"
+    },
+    {
+      "path": "Output/Figures/Summary/province_period_summary.csv",
+      "bytes": 6236,
+      "sha256": "33feb1ef84ba9407338931b5f8ab713899b50033afbe368ca002f823f60e175c"
+    },
+    {
+      "path": "Output/Figures/Timeseries/national_hourly_timeseries.csv",
+      "bytes": 105918,
+      "sha256": "126500180b8a3062d23fa27a295d131e712d2804a1aaf3f11cda14b4464f7c2c"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/feature_importance.csv",
+      "bytes": 788,
+      "sha256": "77aed596b647f2150d553c45663ae6b78383e8a8301a5bff327a87678e1f0a47"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/feature_importance.csv",
+      "bytes": 864,
+      "sha256": "88bffb1c542194191df69449141b7a3b4e0beb78e3cd02055a02550672904acb"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/model_metrics.csv",
+      "bytes": 1092,
+      "sha256": "f32b11aeb7a7c19a79dce27cb4d1318697a056297c348fdab70baf1f9f59f0af"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/prediction_results.csv",
+      "bytes": 4785547,
+      "sha256": "3929a70db92d0d9cfc6b99197578b9573386b4f2850abe6ffb512b08265cac08"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/shap_metadata.json",
+      "bytes": 1259,
+      "sha256": "a9d914c4fdc9647da1722b7dd700abf77fa08cdd96c9483ed3f63c4ee8ee9218"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/shap_values.parquet",
+      "bytes": 7689921,
+      "sha256": "9833fa0533b032fbb3049bb8ca2793b642937f89462f81af889521d320540253"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/mobility/spatial_cv_metrics.csv",
+      "bytes": 3030,
+      "sha256": "0fdea0c1ffaa8d7665fadc378267298916a478c0797225c4f72491e0f3b82c09"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/model_metrics.csv",
+      "bytes": 1275,
+      "sha256": "3bc318a9c28e5430481650ea7cb28faf5447cd542aac4c88e56e4e6a40a68c28"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/feature_importance.csv",
+      "bytes": 867,
+      "sha256": "ed8b98a36756423b87234dd1413e41321a225478106072a2e629294c1bc08a38"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/model_metrics.csv",
+      "bytes": 1095,
+      "sha256": "e327728906516669f533a2dcb7f63f8ee5882ed4d23f50ac749b6d6c512c388b"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/prediction_results.csv",
+      "bytes": 5256970,
+      "sha256": "74629f100ec25d7f7774e17f5f4320c61f724726a3bb18c7c50cd4e6d0e8675f"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/shap_metadata.json",
+      "bytes": 1261,
+      "sha256": "9b0b137838c80a85d375ed1ca3b24eb55c14b0c6f8a6a8af2550b15e551c4127"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/shap_values.parquet",
+      "bytes": 7698695,
+      "sha256": "069588f8123edeb68ea3d17812f2cdf711a97cefd475c398688c5fedceb0fa72"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/pollution/spatial_cv_metrics.csv",
+      "bytes": 3083,
+      "sha256": "c93301bf559a7124e6af49dc059f87dc4d9f362990fabb04a1e3f72903d126bf"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/prediction_results.csv",
+      "bytes": 5466651,
+      "sha256": "bf58a3bd31e753444fa77fb8bec2e3eb31db298769b528f3f0c3160bb84f27e2"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/shap_metadata.json",
+      "bytes": 1332,
+      "sha256": "e18f4bff77f26436d9f68818c9e4d4f82dc7faa49a7a795ceebb506c399f383a"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/shap_values.parquet",
+      "bytes": 9508177,
+      "sha256": "2dbdb044dbb3280af35c4af4682369a0d077c9f66ddd73d22cc78d1484a19ad8"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/festival_pre/spatial_cv_metrics.csv",
+      "bytes": 2481,
+      "sha256": "d8a729f09219ba5402c5a19c2dc59fb8773d13c6b9e2346ea6080a91a22c0c98"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/feature_importance.csv",
+      "bytes": 811,
+      "sha256": "695f43d73bccc454ad9bedd58c4d5038f25a408e01aebed082991b1f24df4bf5"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/feature_importance.csv",
+      "bytes": 894,
+      "sha256": "589b1a2a61b94ce9c838d08085f47695d259e7549219298683c1023d47ab55e0"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/model_metrics.csv",
+      "bytes": 1157,
+      "sha256": "cb04364473340928626fa0f87d7e34b8e90c9be7313985be46edcccb9bf03c2f"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/prediction_results.csv",
+      "bytes": 5422556,
+      "sha256": "f1dd95d41020af58c0d804c83599367eed67124357715974403877cfe272ea79"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/shap_metadata.json",
+      "bytes": 1288,
+      "sha256": "bf97451d71fcd1948f2b1fd5b84cbbefa6ec1827947c0d4e7b8f83d90dbf596a"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/shap_values.parquet",
+      "bytes": 8618941,
+      "sha256": "a957d025ca7717d71f93f3da4c9769b834dff1864f86da38e4a0096554eccfab"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/mobility/spatial_cv_metrics.csv",
+      "bytes": 3058,
+      "sha256": "8092c1603b36b7b79ab26fe910d668b36121d81faaf538d590bddc73836485d8"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/model_metrics.csv",
+      "bytes": 1335,
+      "sha256": "25fb1b695fc27045f992e5308316a0cd0cdf1817606d8f66689b7e239f5b58fc"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/feature_importance.csv",
+      "bytes": 899,
+      "sha256": "2dace19fa77b339e8e7876d8df0826076b90b7fd52940b84bfa692606d8a8e11"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/model_metrics.csv",
+      "bytes": 1154,
+      "sha256": "d7ef124973496956331ca8f0da5f80b93e7517323c26bc4c48c1444441d9d579"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/prediction_results.csv",
+      "bytes": 5908998,
+      "sha256": "72f8d3c475af6009fdc8882d1877e306d80b3699ffa4e1a0d3f32027065dc7c2"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/shap_metadata.json",
+      "bytes": 1290,
+      "sha256": "f6a9660a2c605ba464c762d4ac2e81ba891f57b32862fe8cb2cc977cb4251c33"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/shap_values.parquet",
+      "bytes": 8633640,
+      "sha256": "7a8ddc27185a5dde5565178be0abc5ed7c3879cdee81c0702c25a69bb62fad15"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/pollution/spatial_cv_metrics.csv",
+      "bytes": 3093,
+      "sha256": "65f8bbcd274eefc2885f9df4e3dbea244cc94880b14313a347503ae25f17007c"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/prediction_results.csv",
+      "bytes": 6184115,
+      "sha256": "b9b658dbc8ef292ad6e0623a9f7b8534488bd3d5edf7139da611d1b21c752ca8"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/shap_metadata.json",
+      "bytes": 1367,
+      "sha256": "d43688caac195cf5b7a918e679fb3bdf713863bdcae944fd781f758807d23c35"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/shap_values.parquet",
+      "bytes": 10652692,
+      "sha256": "f4193c37712dfe75bb42ece8082a583226c243a929449216d68516f302a07f2f"
+    },
+    {
+      "path": "Output/Modeling/XGBoost/post_festival/spatial_cv_metrics.csv",
+      "bytes": 2483,
+      "sha256": "5a739339534eb7455f4d1cc90c6d09b94306badc9f6b8763ed61b3bdd657c304"
+    },
+    {
+      "path": "Output/Population/diagnostics/official_population_2018_validation.csv",
+      "bytes": 1454,
+      "sha256": "be513808ada4a7a5ad31eb4978d8af4be23f7831fc9712bc609b196b20e5963a"
+    },
+    {
+      "path": "Output/SpatialAnalysis/GlobalMoran/component_global_moran_results.csv",
+      "bytes": 822,
+      "sha256": "d3e2cb4d3c36b3892ee5ae8c45d8f322c10e5f25932e5d2190be1e7f8b915714"
+    },
+    {
+      "path": "Output/SpatialAnalysis/GlobalMoran/global_moran_results.csv",
+      "bytes": 490,
+      "sha256": "896d47823c0f2c47141bb77478a222bf581322e25931595aafe3f487e87faf32"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_exposure_change.parquet",
+      "bytes": 17752302,
+      "sha256": "077ad5cee9e29bcf44ad5ccb548c3927440d620c2e1906fef7b4b3686fab7ed8"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_exposure_change_cluster_counts.csv",
+      "bytes": 427,
+      "sha256": "296687ac70888ea285702aa9fc859add324f797b4ae7e068708ce86ae42a8f33"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_exposure_change_province_summary.csv",
+      "bytes": 13053,
+      "sha256": "63b5d6c3ca1e060fff0dd15779737b00f090452bd76499dcdc868174bf410db0"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_mobility_component.parquet",
+      "bytes": 22618256,
+      "sha256": "d1c7e6880c144e7ab5b1fc09ac89ccdec1dffccb0a8b2b9e7e1d40984b250d27"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_mobility_component_cluster_counts.csv",
+      "bytes": 427,
+      "sha256": "e825a1e59827a3045d84d0749d4e39c5e6209409ff70726babe46542f6d979e2"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_mobility_component_province_summary.csv",
+      "bytes": 13774,
+      "sha256": "7a086b4ced2ca56c62533db263c4629252cc8e36d0029aac908b49d6b2aac94a"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_pollution_component.parquet",
+      "bytes": 22611119,
+      "sha256": "5413342309cb4c6d99f36edd38b028a7ec39cd25880271789411a3f199a7e030"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_pollution_component_cluster_counts.csv",
+      "bytes": 431,
+      "sha256": "62c716b2a1876ff5acfdf7a9a26e4a6c08336124d1001daad564bc31b3381ac0"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_festival_pre_pollution_component_province_summary.csv",
+      "bytes": 13179,
+      "sha256": "4f4e717b454db0cdb877b1314dde9265dbef80a07de648995f28a1fbca5d63ff"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_exposure_change.parquet",
+      "bytes": 17763760,
+      "sha256": "35beb0ae8a0a35de6e41d54eec28d8abd8e47d2db1dbbae4d918064d07332443"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_exposure_change_cluster_counts.csv",
+      "bytes": 433,
+      "sha256": "5bad405cd2cdbfd25af9abc90298f781b1376499db50d441ed57723fa255da2a"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_exposure_change_province_summary.csv",
+      "bytes": 13557,
+      "sha256": "02d3c4a2ba7c9fca6a2bc69b4f29da66740d8369ca8d18ac41d5fcee66e8fbfc"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_mobility_component.parquet",
+      "bytes": 22619831,
+      "sha256": "70a6327856fb30843e1732df9da696cdd95a7573d1c43a90722d7c5ed2473448"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_mobility_component_cluster_counts.csv",
+      "bytes": 433,
+      "sha256": "9b111b0c944fcb6e1cfa77a72383f400adf8ac0f8bc0a830dfb07531474e1e24"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_mobility_component_province_summary.csv",
+      "bytes": 14007,
+      "sha256": "5d4ddbec4c6faa24dce0c7683d3afda3940c0e4cf56d44c9f1719be459fa6ad3"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_pollution_component.parquet",
+      "bytes": 22604963,
+      "sha256": "61596ef1a0492079b5dfaf4192775efaa8e9baea0efeb16d78f2137c7e5985f2"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_pollution_component_cluster_counts.csv",
+      "bytes": 439,
+      "sha256": "3f62d5232bc8b12d88bcfb9d4498fa1e6f17710cc393b0f9d068ec2479391e24"
+    },
+    {
+      "path": "Output/SpatialAnalysis/LISA/lisa_post_festival_pollution_component_province_summary.csv",
+      "bytes": 14244,
+      "sha256": "1bf905d19b90f40b89ee91bd65ad7591c518b07cb8e6bc5c21c71c19e8e95e2d"
+    },
+    {
+      "path": "Web/Boundary/china_provinces_polygon.shp",
+      "bytes": 1508752,
+      "sha256": "dd7eeb1341ca8b0d598be80884e9e16d36b16135ca30f99fada4217150a03527"
+    }
+  ]
+}

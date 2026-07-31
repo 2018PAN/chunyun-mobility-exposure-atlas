@@ -1,0 +1,749 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="An interactive research atlas of population mobility and PM2.5 exposure during the 2018 Chunyun period."
+    >
+    <meta name="theme-color" content="#f5f5f7">
+    <title>Mobility &amp; Exposure Atlas</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23eff6ff'/%3E%3Cpath d='M16 44V30M32 44V16M48 44V24' stroke='%230b7bf3' stroke-width='7' stroke-linecap='round'/%3E%3C/svg%3E">
+    <link rel="stylesheet" href="./styles.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+
+    <svg class="svg-sprite" aria-hidden="true">
+      <symbol id="icon-overview" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+        <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+        <path d="M14 17.5h7M17.5 14v7"></path>
+      </symbol>
+      <symbol id="icon-spatial" viewBox="0 0 24 24">
+        <path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3Z"></path>
+        <path d="M9 3v15M15 6v15"></path>
+      </symbol>
+      <symbol id="icon-model" viewBox="0 0 24 24">
+        <path d="M4 19V9M10 19V5M16 19v-7M22 19H2"></path>
+        <path d="m3 6 6-3 6 4 6-5"></path>
+      </symbol>
+      <symbol id="icon-shap" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2.5"></circle>
+        <circle cx="5" cy="6" r="2"></circle>
+        <circle cx="19" cy="6" r="2"></circle>
+        <circle cx="5" cy="18" r="2"></circle>
+        <circle cx="19" cy="18" r="2"></circle>
+        <path d="m6.7 7.2 3.4 3M17.3 7.2l-3.4 3M6.7 16.8l3.4-3M17.3 16.8l-3.4-3"></path>
+      </symbol>
+      <symbol id="icon-method" viewBox="0 0 24 24">
+        <path d="M8 3h8M9 3v5l-5 9a2.8 2.8 0 0 0 2.4 4h11.2a2.8 2.8 0 0 0 2.4-4l-5-9V3"></path>
+        <path d="M7 15h10"></path>
+      </symbol>
+      <symbol id="icon-plus" viewBox="0 0 24 24">
+        <path d="M12 5v14M5 12h14"></path>
+      </symbol>
+      <symbol id="icon-minus" viewBox="0 0 24 24">
+        <path d="M5 12h14"></path>
+      </symbol>
+      <symbol id="icon-reset" viewBox="0 0 24 24">
+        <path d="M4 12a8 8 0 1 0 2.3-5.7L4 8.6"></path>
+        <path d="M4 4v4.6h4.6"></path>
+      </symbol>
+      <symbol id="icon-expand" viewBox="0 0 24 24">
+        <path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"></path>
+      </symbol>
+      <symbol id="icon-arrow" viewBox="0 0 24 24">
+        <path d="M7 17 17 7M7 7h10v10"></path>
+      </symbol>
+      <symbol id="icon-check" viewBox="0 0 24 24">
+        <path d="m5 12 4 4L19 6"></path>
+      </symbol>
+      <symbol id="icon-info" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="9"></circle>
+        <path d="M12 11v6M12 7.5v.5"></path>
+      </symbol>
+    </svg>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a class="brand" href="#/overview" aria-label="Mobility and Exposure Atlas home">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i>
+          </span>
+          <span>
+            <strong>Mobility &amp; Exposure </strong>
+            <small>Visualization Atlas</small>
+          </span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Research views">
+          <a href="#/overview" data-route="overview">
+            <svg width="20" height="20"><use href="#icon-overview"></use></svg>
+            <span>Overview</span>
+          </a>
+          <a href="#/spatial" data-route="spatial">
+            <svg width="20" height="20"><use href="#icon-spatial"></use></svg>
+            <span>Spatial Pattern</span>
+          </a>
+          <a href="#/models" data-route="models">
+            <svg width="20" height="20"><use href="#icon-model"></use></svg>
+            <span>Model Comparison</span>
+          </a>
+          <a href="#/shap" data-route="shap">
+            <svg width="20" height="20"><use href="#icon-shap"></use></svg>
+            <span>SHAP Explorer</span>
+          </a>
+          <a href="#/interpretation" data-route="interpretation">
+            <svg width="20" height="20"><use href="#icon-method"></use></svg>
+            <span>Methods &amp; Notes</span>
+          </a>
+        </nav>
+
+        <div class="study-badge">
+          <span class="status-dot" aria-hidden="true"></span>
+          <div>
+            <strong>2018 Chunyun</strong>
+            <span>40 days · national 10 km grid</span>
+          </div>
+        </div>
+        <p class="sidebar-note">Master’s thesis research dashboard</p>
+      </aside>
+
+      <div class="main-column">
+        <header class="topbar">
+          <a class="mobile-brand" href="#/overview" aria-label="Atlas home">
+            <span class="brand-mark" aria-hidden="true">
+              <i></i><i></i><i></i>
+            </span>
+            <span>Mobility &amp; Exposure</span>
+          </a>
+          <div class="topbar-context">
+            <span>Research atlas</span>
+            <strong id="route-title">Overview</strong>
+          </div>
+          <div class="data-status">
+            <span class="status-dot" aria-hidden="true"></span>
+            <span>Formal outputs</span>
+          </div>
+        </header>
+
+        <main id="main-content" tabindex="-1">
+          <section class="page" data-page="overview" aria-labelledby="overview-title">
+            <div class="research-header reveal">
+              <div class="research-header-copy">
+                <span class="eyebrow">2018 Chunyun research atlas</span>
+                <h1 id="overview-title">Population activity and PM₂.₅ exposure during Chunyun</h1>
+                <p>
+                  Explore how changes in population activity and air pollution jointly
+                  shaped population-weighted exposure before, during, and after the
+                  Spring Festival travel period.
+                </p>
+                <div class="research-meta">
+                  <span>01 Feb – 12 Mar 2018</span>
+                  <span>Beijing local time</span>
+                  <span>National 10 km grid</span>
+                </div>
+              </div>
+              <div class="research-definition" aria-label="Exposure identity">
+                <span>Exposure identity</span>
+                <strong>E = P × C</strong>
+                <p>Population activity × PM₂.₅ concentration</p>
+              </div>
+            </div>
+
+            <div class="section-heading reveal">
+              <div>
+                <span class="eyebrow">National pulse</span>
+                <h2>Study overview</h2>
+              </div>
+              <div class="segmented-control" data-control="overview-comparison" aria-label="Overview comparison">
+                <button type="button" data-value="festival_pre">Festival vs. pre</button>
+                <button type="button" data-value="post_festival">Post vs. festival</button>
+              </div>
+            </div>
+
+            <div class="kpi-grid reveal" id="overview-kpis" aria-live="polite"></div>
+            <aside class="research-note reveal">
+              <svg width="18" height="18" aria-hidden="true"><use href="#icon-info"></use></svg>
+              <p><strong>Interpretation note.</strong> Platform-derived counts are treated as a proxy for population activity. They do not directly measure resident population or individual migration flows.</p>
+            </aside>
+
+            <div class="content-grid overview-grid">
+              <article class="card card-wide reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Daily index</span>
+                    <h3>Exposure and population-weighted PM₂.₅</h3>
+                  </div>
+                  <div class="chart-legend" aria-label="Chart legend">
+                    <span><i class="legend-line exposure"></i>Exposure index</span>
+                    <span><i class="legend-line pollution"></i>PM₂.₅ index</span>
+                  </div>
+                </div>
+                <p class="card-context">Indexed to the pre-festival mean = 100. Hover or focus the chart to inspect a day.</p>
+                <div class="chart-frame" id="overview-trend"></div>
+                <div class="period-strip" id="period-strip"></div>
+              </article>
+
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Exposure identity</span>
+                    <h3>National decomposition</h3>
+                  </div>
+                  <span class="metric-chip" id="decomposition-total"></span>
+                </div>
+                <p class="card-context" id="decomposition-context"></p>
+                <div id="decomposition-chart" class="decomposition-chart"></div>
+                <p class="insight-note" id="decomposition-insight"></p>
+              </article>
+            </div>
+
+            <article class="card reveal">
+              <div class="card-header table-card-header">
+                <div>
+                  <span class="eyebrow">Regional signals</span>
+                  <h3>Largest provincial exposure shifts</h3>
+                </div>
+                <span class="table-note">Ranked by absolute exposure change</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Province</th>
+                      <th scope="col" class="numeric">Exposure change</th>
+                      <th scope="col" class="numeric">Population change</th>
+                      <th scope="col" class="numeric">PM₂.₅ change</th>
+                    </tr>
+                  </thead>
+                  <tbody id="province-table"></tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <section class="page" data-page="spatial" aria-labelledby="spatial-title" hidden>
+            <div class="page-heading reveal">
+              <div>
+                <span class="eyebrow">Local spatial association</span>
+                <h1 id="spatial-title">Spatial Pattern</h1>
+                <p>Compare grid-cell changes, local spatial clusters, distributions, and province-level rankings across six analytical layers.</p>
+              </div>
+              <div class="filter-stack">
+                <div class="segmented-control" data-control="spatial-comparison" aria-label="Spatial comparison">
+                  <button type="button" data-value="festival_pre">Festival vs. pre</button>
+                  <button type="button" data-value="post_festival">Post vs. festival</button>
+                </div>
+                <div class="filter-row">
+                  <label class="select-control">
+                    <span>Analytical layer</span>
+                    <select id="spatial-layer-select" aria-label="Spatial analytical layer">
+                      <option value="population_activity">Population activity change</option>
+                      <option value="total_exposure">Total exposure change</option>
+                      <option value="pm25">PM₂.₅ concentration change</option>
+                      <option value="mobility">Mobility component</option>
+                      <option value="pollution">Pollution component</option>
+                      <option value="interaction">Interaction component</option>
+                    </select>
+                  </label>
+                  <div class="segmented-control" data-control="spatial-view" aria-label="Spatial map view">
+                    <button type="button" data-value="numeric">Change values</button>
+                    <button type="button" data-value="lisa">LISA clusters</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="spatial-layout">
+              <article class="card map-card reveal" id="spatial-map-card">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow" id="spatial-map-eyebrow">Change surface</span>
+                    <h2 id="spatial-map-title">LISA cluster map</h2>
+                  </div>
+                  <button class="icon-button" type="button" data-expand-card="spatial-map-card" aria-label="Toggle full-screen spatial map">
+                    <svg width="18" height="18"><use href="#icon-expand"></use></svg>
+                  </button>
+                </div>
+                <div class="map-shell">
+                  <canvas id="spatial-canvas" tabindex="0" aria-label="Interactive LISA cluster map of China. Use arrow keys to pan and plus or minus to zoom."></canvas>
+                  <div class="map-loading" id="spatial-loading" role="status">Loading spatial cells…</div>
+                  <div class="map-tooltip" id="spatial-tooltip" role="status" hidden></div>
+                  <div class="map-controls" aria-label="Map controls">
+                    <button type="button" data-map="spatial" data-action="zoom-in" aria-label="Zoom in">
+                      <svg width="18" height="18"><use href="#icon-plus"></use></svg>
+                    </button>
+                    <button type="button" data-map="spatial" data-action="zoom-out" aria-label="Zoom out">
+                      <svg width="18" height="18"><use href="#icon-minus"></use></svg>
+                    </button>
+                    <button type="button" data-map="spatial" data-action="reset" aria-label="Reset map view">
+                      <svg width="18" height="18"><use href="#icon-reset"></use></svg>
+                    </button>
+                  </div>
+                  <div class="map-hint">Drag to pan · scroll to zoom</div>
+                </div>
+                <div class="cluster-legend" id="spatial-legend" aria-label="Spatial map legend"></div>
+              </article>
+
+              <aside class="spatial-aside">
+                <article class="card stat-feature reveal" id="spatial-summary-card">
+                  <span class="eyebrow" id="spatial-summary-eyebrow">Global autocorrelation</span>
+                  <div class="stat-feature-value">
+                    <strong id="moran-value">—</strong>
+                    <span id="spatial-summary-label">Moran’s I</span>
+                  </div>
+                  <p id="moran-summary"></p>
+                  <dl class="mini-stats">
+                    <div><dt id="spatial-mini-label-1">p-value</dt><dd id="moran-p">—</dd></div>
+                    <div><dt>Grids</dt><dd id="moran-grids">—</dd></div>
+                    <div><dt id="spatial-mini-label-3">Distance band</dt><dd id="spatial-mini-value-3">50 km</dd></div>
+                  </dl>
+                </article>
+
+                <article class="card reveal" id="spatial-cluster-card">
+                  <span class="eyebrow">Cluster composition</span>
+                  <h3>Local spatial regimes</h3>
+                  <div id="cluster-stack" class="cluster-stack" aria-hidden="true"></div>
+                  <div id="cluster-list" class="cluster-list"></div>
+                </article>
+              </aside>
+            </div>
+
+            <div class="content-grid spatial-analysis-grid">
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Grid-cell distribution</span>
+                    <h3 id="spatial-distribution-title">Change-value distribution</h3>
+                  </div>
+                  <span class="table-note">2nd–98th percentile display range</span>
+                </div>
+                <div id="spatial-distribution" class="distribution-chart"></div>
+              </article>
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Province comparison</span>
+                    <h3>Largest regional signals</h3>
+                  </div>
+                  <label class="inline-select">
+                    <span class="sr-only">Province ranking metric</span>
+                    <select id="province-metric-select">
+                      <option value="mean">Mean</option>
+                      <option value="median">Median</option>
+                      <option value="sum">Sum</option>
+                      <option value="positiveShare">Positive share</option>
+                    </select>
+                  </label>
+                </div>
+                <div id="spatial-province-ranking" class="province-ranking"></div>
+              </article>
+            </div>
+
+            <article class="card reveal">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Cross-target comparison</span>
+                  <h3>Spatial dependence by analytical target</h3>
+                </div>
+                <span class="table-note">999 permutations · row-standardized weights</span>
+              </div>
+              <div id="moran-comparison" class="moran-comparison"></div>
+            </article>
+          </section>
+
+          <section class="page" data-page="models" aria-labelledby="models-title" hidden>
+            <div class="page-heading reveal">
+              <div>
+                <span class="eyebrow">Predictive evidence</span>
+                <h1 id="models-title">Model Comparison</h1>
+                <p>Compare random forest and XGBoost under random holdout and 300 km spatial cross-validation.</p>
+              </div>
+              <div class="filter-stack">
+                <div class="segmented-control" data-control="model-comparison" aria-label="Model comparison period">
+                  <button type="button" data-value="festival_pre">Festival vs. pre</button>
+                  <button type="button" data-value="post_festival">Post vs. festival</button>
+                </div>
+                <div class="segmented-control target-control" data-control="model-target" aria-label="Model target">
+                  <button type="button" data-value="total_exposure">Exposure</button>
+                  <button type="button" data-value="mobility">Mobility</button>
+                  <button type="button" data-value="pollution">Pollution</button>
+                </div>
+                <div class="filter-row">
+                  <div class="segmented-control" data-control="model-metric" aria-label="Model performance metric">
+                    <button type="button" data-value="r2">R²</button>
+                    <button type="button" data-value="rmse">RMSE</button>
+                    <button type="button" data-value="mae">MAE</button>
+                  </div>
+                  <label class="select-control compact-select">
+                    <span>Importance source</span>
+                    <select id="importance-source-select">
+                      <option value="xgboost">XGBoost</option>
+                      <option value="randomForest">Random forest</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="kpi-grid compact-kpis reveal" id="model-kpis"></div>
+
+            <div class="content-grid model-grid">
+              <article class="card card-wide reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Generalization</span>
+                    <h2 id="model-chart-title">R² by model specification</h2>
+                  </div>
+                  <div class="chart-legend" aria-label="Chart legend">
+                    <span><i class="legend-block test"></i>Random holdout</span>
+                    <span><i class="legend-block spatial"></i>Spatial CV</span>
+                  </div>
+                </div>
+                <div id="model-chart" class="model-chart"></div>
+              </article>
+
+              <article class="card protocol-card reveal">
+                <span class="eyebrow">Evaluation protocol</span>
+                <h3>Two views of performance</h3>
+                <ul class="check-list">
+                  <li><svg width="20" height="20"><use href="#icon-check"></use></svg><span><strong>70 / 30 random split</strong> preserves comparability with the formal analysis.</span></li>
+                  <li><svg width="20" height="20"><use href="#icon-check"></use></svg><span><strong>Five spatial folds</strong> use 300 km blocks to test geographic transferability.</span></li>
+                  <li><svg width="20" height="20"><use href="#icon-check"></use></svg><span><strong>B0 versus B1</strong> separates baseline predictors from the extended covariate set.</span></li>
+                </ul>
+                <p class="insight-note" id="model-insight"></p>
+              </article>
+            </div>
+
+            <div class="content-grid model-analysis-grid">
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Model-native importance</span>
+                    <h3 id="importance-title">Extended-model feature importance</h3>
+                  </div>
+                  <span class="table-note" id="importance-feature-count"></span>
+                </div>
+                <div id="feature-importance-chart" class="importance-chart"></div>
+              </article>
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Prediction diagnostics</span>
+                    <h3>Observed versus predicted</h3>
+                  </div>
+                  <span class="table-note">B1 XGBoost · sampled test cells</span>
+                </div>
+                <div id="prediction-scatter" class="diagnostic-chart"></div>
+              </article>
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Error structure</span>
+                    <h3>Residual distribution</h3>
+                  </div>
+                  <span class="table-note">Observed − predicted</span>
+                </div>
+                <div id="residual-histogram" class="diagnostic-chart"></div>
+              </article>
+            </div>
+
+            <article class="card reveal">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Audit table</span>
+                  <h3>Complete performance metrics</h3>
+                </div>
+                <span class="table-note">Formal saved-model outputs</span>
+              </div>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th scope="col">Model</th>
+                      <th scope="col">Specification</th>
+                      <th scope="col" class="numeric">Test R²</th>
+                      <th scope="col" class="numeric">Spatial CV R²</th>
+                      <th scope="col" class="numeric">Test RMSE</th>
+                      <th scope="col" class="numeric">Features</th>
+                    </tr>
+                  </thead>
+                  <tbody id="model-table"></tbody>
+                </table>
+              </div>
+            </article>
+          </section>
+
+          <section class="page" data-page="shap" aria-labelledby="shap-title" hidden>
+            <div class="page-heading reveal">
+              <div>
+                <span class="eyebrow">Model explanation</span>
+                <h1 id="shap-title">SHAP Explorer</h1>
+                <p>Inspect global feature importance, contribution direction, and spatial heterogeneity from the formal B1 XGBoost models.</p>
+              </div>
+              <div class="filter-stack">
+                <div class="segmented-control" data-control="shap-comparison" aria-label="SHAP comparison period">
+                  <button type="button" data-value="festival_pre">Festival vs. pre</button>
+                  <button type="button" data-value="post_festival">Post vs. festival</button>
+                </div>
+                <div class="segmented-control target-control" data-control="shap-target" aria-label="SHAP target">
+                  <button type="button" data-value="total_exposure">Exposure</button>
+                  <button type="button" data-value="mobility">Mobility</button>
+                  <button type="button" data-value="pollution">Pollution</button>
+                </div>
+                <label class="select-control">
+                  <span>Explanatory feature</span>
+                  <select id="shap-feature-select" aria-label="SHAP explanatory feature"></select>
+                </label>
+              </div>
+            </div>
+
+            <div class="kpi-grid compact-kpis reveal" id="shap-kpis"></div>
+
+            <div class="shap-layout">
+              <article class="card reveal">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Global importance</span>
+                    <h2>Global SHAP ranking</h2>
+                  </div>
+                  <span class="table-note" id="shap-feature-count">Select a feature to explore</span>
+                </div>
+                <div id="shap-ranking" class="shap-ranking"></div>
+              </article>
+
+              <article class="card map-card reveal" id="shap-map-card">
+                <div class="card-header">
+                  <div>
+                    <span class="eyebrow">Spatial explanation</span>
+                    <h2 id="shap-map-title">Feature contribution surface</h2>
+                  </div>
+                  <button class="icon-button" type="button" data-expand-card="shap-map-card" aria-label="Toggle full-screen SHAP map">
+                    <svg width="18" height="18"><use href="#icon-expand"></use></svg>
+                  </button>
+                </div>
+                <div class="map-shell">
+                  <canvas id="shap-canvas" tabindex="0" aria-label="Interactive SHAP contribution map of China. Use arrow keys to pan and plus or minus to zoom."></canvas>
+                  <div class="map-loading" id="shap-loading" role="status">Loading SHAP surface…</div>
+                  <div class="map-tooltip" id="shap-tooltip" role="status" hidden></div>
+                  <div class="map-controls" aria-label="Map controls">
+                    <button type="button" data-map="shap" data-action="zoom-in" aria-label="Zoom in">
+                      <svg width="18" height="18"><use href="#icon-plus"></use></svg>
+                    </button>
+                    <button type="button" data-map="shap" data-action="zoom-out" aria-label="Zoom out">
+                      <svg width="18" height="18"><use href="#icon-minus"></use></svg>
+                    </button>
+                    <button type="button" data-map="shap" data-action="reset" aria-label="Reset map view">
+                      <svg width="18" height="18"><use href="#icon-reset"></use></svg>
+                    </button>
+                  </div>
+                  <div class="map-hint">Drag to pan · scroll to zoom</div>
+                </div>
+                <div class="gradient-legend" aria-label="SHAP contribution legend">
+                  <span>Negative contribution</span><i></i><span>Positive contribution</span>
+                </div>
+              </article>
+            </div>
+
+            <article class="card reveal">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Feature dependence</span>
+                  <h2 id="shap-dependence-title">Feature value versus SHAP contribution</h2>
+                </div>
+                <span class="table-note" id="shap-correlation-note"></span>
+              </div>
+              <div id="shap-dependence" class="shap-dependence"></div>
+            </article>
+
+            <article class="card reveal">
+              <div class="card-header">
+                <div>
+                  <span class="eyebrow">Direction and dispersion</span>
+                  <h2 id="shap-beeswarm-title">Feature contribution distribution</h2>
+                </div>
+                <div class="chart-legend">
+                  <span><i class="legend-dot low"></i>Low feature value</span>
+                  <span><i class="legend-dot high"></i>High feature value</span>
+                </div>
+              </div>
+              <div id="shap-beeswarm" class="shap-beeswarm"></div>
+            </article>
+
+            <div class="explanation-grid">
+              <article class="card reveal">
+                <span class="eyebrow">Reading direction</span>
+                <h3 id="shap-direction-title"></h3>
+                <p id="shap-direction-copy"></p>
+              </article>
+              <article class="card reveal">
+                <span class="eyebrow">Coverage note</span>
+                <h3>Full model support</h3>
+                <p>SHAP values were recalculated for every complete modelling grid while preserving the original train/test membership and saved model.</p>
+              </article>
+              <article class="card reveal">
+                <span class="eyebrow">Interpretation boundary</span>
+                <h3>Association is not causation</h3>
+                <p>SHAP decomposes model predictions. It identifies influential predictors and spatial heterogeneity but does not establish causal effects.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="page" data-page="interpretation" aria-labelledby="interpretation-title" hidden>
+            <div class="page-heading reveal">
+              <div>
+                <span class="eyebrow">Methods and meaning</span>
+                <h1 id="interpretation-title">Methods &amp; Notes</h1>
+                <p>A transparent guide to the analytical sequence, definitions, and limits behind every view.</p>
+              </div>
+              <a class="text-link" href="./Data/source-manifest.json">
+                Source manifest
+                <svg width="18" height="18"><use href="#icon-arrow"></use></svg>
+              </a>
+            </div>
+
+            <article class="card method-flow reveal">
+              <div class="method-step">
+                <span>01</span>
+                <div><strong>Calibrate population</strong><p>Five-minute mobility observations are time-corrected and calibrated to official 2018 population totals.</p></div>
+              </div>
+              <div class="method-step">
+                <span>02</span>
+                <div><strong>Match PM₂.₅</strong><p>Hourly population and pollution are combined on a national 10 km grid to estimate exposure.</p></div>
+              </div>
+              <div class="method-step">
+                <span>03</span>
+                <div><strong>Contrast periods</strong><p>Daily values are averaged into pre-festival, festival, and post-festival periods.</p></div>
+              </div>
+              <div class="method-step">
+                <span>04</span>
+                <div><strong>Explain change</strong><p>Decomposition, Moran/LISA, machine learning, spatial CV, and SHAP reveal distinct dimensions of the pattern.</p></div>
+              </div>
+            </article>
+
+            <div class="explanation-grid method-cards">
+              <article class="card reveal">
+                <span class="method-symbol mobility-symbol">P</span>
+                <span class="eyebrow">Population</span>
+                <h2>Mobility component</h2>
+                <p><code>C₀ × (P₁ − P₀)</code></p>
+                <p>Change associated with the redistribution of population activity while baseline pollution is held constant.</p>
+              </article>
+              <article class="card reveal">
+                <span class="method-symbol pollution-symbol">C</span>
+                <span class="eyebrow">Concentration</span>
+                <h2>Pollution component</h2>
+                <p><code>P₀ × (C₁ − C₀)</code></p>
+                <p>Change associated with PM₂.₅ variation while baseline population is held constant.</p>
+              </article>
+              <article class="card reveal">
+                <span class="method-symbol interaction-symbol">P×C</span>
+                <span class="eyebrow">Joint movement</span>
+                <h2>Interaction component</h2>
+                <p><code>(P₁ − P₀) × (C₁ − C₀)</code></p>
+                <p>The residual joint effect when mobility and pollution change at the same time.</p>
+              </article>
+            </div>
+
+            <div class="content-grid interpretation-grid">
+              <article class="card reveal">
+                <span class="eyebrow">Spatial statistics</span>
+                <h2>Moran’s I and LISA</h2>
+                <div class="definition-list">
+                  <div><strong>Global Moran’s I</strong><p>Measures whether similar change values cluster across neighbouring 10 km cells.</p></div>
+                  <div><strong>High–High / Low–Low</strong><p>Local clusters where a cell and its neighbours share consistently high or low values.</p></div>
+                  <div><strong>High–Low / Low–High</strong><p>Spatial outliers whose values contrast with their local neighbourhood.</p></div>
+                </div>
+              </article>
+
+              <article class="card caveat-card reveal">
+                <span class="eyebrow">Read with these boundaries</span>
+                <h2>Data and interpretation notes</h2>
+                <ul class="note-list">
+                  <li>01 February contains 16 observed hours and is retained as incomplete rather than imputed.</li>
+                  <li>Blank SHAP cells fall outside complete model support; they are not zero contributions.</li>
+                  <li>Prediction diagnostics use sampled held-out test support and are not national estimates.</li>
+                  <li>The validated boundary workflow explicitly assigns EPSG:4326 where source metadata is absent.</li>
+                  <li>Model fit and SHAP values describe predictive associations, not causal effects.</li>
+                </ul>
+              </article>
+            </div>
+
+            <div class="methods-detail-grid">
+              <article class="card reveal">
+                <span class="eyebrow">Study periods</span>
+                <h2>Three fixed analytical windows</h2>
+                <div class="period-definition-list">
+                  <div><strong>Pre-festival</strong><span>01–14 Feb 2018</span><em>14 days</em></div>
+                  <div><strong>Festival holiday</strong><span>15–21 Feb 2018</span><em>7 days</em></div>
+                  <div><strong>Post-festival</strong><span>22 Feb–12 Mar 2018</span><em>19 days</em></div>
+                </div>
+                <p class="method-footnote">All timestamps are interpreted in Beijing local time. Adjacent-period contrasts are Festival − Pre and Post − Festival.</p>
+              </article>
+
+              <article class="card reveal">
+                <span class="eyebrow">Predictive design</span>
+                <h2>Baseline and extended models</h2>
+                <div class="definition-list compact-definitions">
+                  <div><strong>B0 baseline</strong><p>Five period-specific population or pollution descriptors.</p></div>
+                  <div><strong>B1 extended</strong><p>10 predictors for component targets and 13 predictors for total exposure.</p></div>
+                  <div><strong>Validation</strong><p>A 70/30 random holdout is paired with five 300 km spatial folds.</p></div>
+                </div>
+              </article>
+
+              <article class="card reveal">
+                <span class="eyebrow">Evaluation metrics</span>
+                <h2>How model fit is read</h2>
+                <div class="definition-list compact-definitions">
+                  <div><strong>R²</strong><p>Explained variance; negative spatial values are worse than a fold-specific mean baseline.</p></div>
+                  <div><strong>RMSE</strong><p>Root mean squared error, with greater sensitivity to large residuals.</p></div>
+                  <div><strong>MAE</strong><p>Mean absolute error, a more robust summary of typical error magnitude.</p></div>
+                </div>
+              </article>
+
+              <article class="card reveal limitations-card">
+                <span class="eyebrow">Research limitations</span>
+                <h2>Boundaries of inference</h2>
+                <ul class="note-list">
+                  <li>Platform counts proxy population activity; they are not direct observations of migration or resident population.</li>
+                  <li>Models and SHAP use complete cases, so their support is smaller than the full descriptive grid.</li>
+                  <li>Decomposition components are mathematical constructions based on the exposure identity.</li>
+                  <li>Model performance and SHAP explain prediction, not causal mechanisms.</li>
+                  <li>Extreme urban grids can strongly influence national totals and error distributions.</li>
+                </ul>
+              </article>
+            </div>
+
+            <article class="provenance-banner reveal">
+              <svg width="22" height="22"><use href="#icon-info"></use></svg>
+              <div>
+                <strong>Reproducible static release</strong>
+                <p>Published values are aggregated research outputs generated from the formal analysis. No raw platform records or direct personal identifiers are included. The source manifest records relative paths, byte sizes, and SHA-256 hashes for provenance.</p>
+              </div>
+            </article>
+          </section>
+        </main>
+
+        <footer class="site-footer">
+          <span>Mobility &amp; Exposure Atlas</span>
+          <span>Master’s thesis visualization · 2018 Chunyun</span>
+        </footer>
+      </div>
+    </div>
+
+    <nav class="bottom-nav" aria-label="Mobile research views">
+      <a href="#/overview" data-route="overview"><svg width="20" height="20"><use href="#icon-overview"></use></svg><span>Overview</span></a>
+      <a href="#/spatial" data-route="spatial"><svg width="20" height="20"><use href="#icon-spatial"></use></svg><span>Spatial</span></a>
+      <a href="#/models" data-route="models"><svg width="20" height="20"><use href="#icon-model"></use></svg><span>Models</span></a>
+      <a href="#/shap" data-route="shap"><svg width="20" height="20"><use href="#icon-shap"></use></svg><span>SHAP</span></a>
+      <a href="#/interpretation" data-route="interpretation"><svg width="20" height="20"><use href="#icon-method"></use></svg><span>Methods</span></a>
+    </nav>
+
+    <script src="./Data/atlas-data.js"></script>
+    <script src="./app.js" defer></script>
+  </body>
+</html>
