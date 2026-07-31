@@ -37,6 +37,7 @@
   let boundary = null;
   let spatialMap = null;
   let shapMap = null;
+  let trendTooltip = null;
 
   const COLORS = {
     exposure: "#d97706",
@@ -140,6 +141,44 @@
       .replaceAll(">", "&gt;")
       .replaceAll('"', "&quot;")
       .replaceAll("'", "&#039;");
+  }
+
+  function positionFloatingTooltip(tooltip, anchorX, anchorY, placement = "right") {
+    const viewportPadding = 12;
+    const gap = 12;
+    const bounds = tooltip.getBoundingClientRect();
+    let left;
+    let top;
+    let side = placement;
+
+    if (placement === "top") {
+      left = anchorX - bounds.width / 2;
+      top = anchorY - bounds.height - gap;
+      if (top < viewportPadding) {
+        top = anchorY + gap;
+        side = "bottom";
+      }
+    } else {
+      left = anchorX + gap;
+      top = anchorY - bounds.height / 2;
+      if (left + bounds.width > window.innerWidth - viewportPadding) {
+        left = anchorX - bounds.width - gap;
+        side = "left";
+      }
+    }
+
+    left = Math.max(
+      viewportPadding,
+      Math.min(left, window.innerWidth - bounds.width - viewportPadding),
+    );
+    top = Math.max(
+      viewportPadding,
+      Math.min(top, window.innerHeight - bounds.height - viewportPadding),
+    );
+
+    tooltip.dataset.side = side;
+    tooltip.style.left = `${Math.round(left)}px`;
+    tooltip.style.top = `${Math.round(top)}px`;
   }
 
   function compact(value, digits = 1) {
@@ -306,6 +345,9 @@
 
   function renderRoute() {
     const active = route();
+    if (trendTooltip) trendTooltip.hidden = true;
+    if (active !== "spatial") spatialMap?.clearSelection();
+    if (active !== "shap") shapMap?.clearSelection();
     $$(".page").forEach((page) => {
       page.hidden = page.dataset.page !== active;
     });
@@ -380,6 +422,8 @@
 
   function renderTrend() {
     const root = $("#overview-trend");
+    trendTooltip?.remove();
+    trendTooltip = null;
     const daily = DATA.overview.daily;
     const pre = daily.filter((item) => item.period === "Pre-festival");
     const exposureBase =
@@ -444,6 +488,10 @@
     const exposureDot = $("#trend-exposure-dot", root);
     const pmDot = $("#trend-pm-dot", root);
     const tooltip = $(".chart-tooltip", root);
+    const svg = $("svg", root);
+    tooltip.classList.add("is-floating");
+    document.body.appendChild(tooltip);
+    trendTooltip = tooltip;
 
     function showAt(index) {
       const item = points[Math.max(0, Math.min(points.length - 1, index))];
@@ -458,13 +506,20 @@
       pmDot.setAttribute("cx", px);
       pmDot.setAttribute("cy", y(item.pmIndex));
       tooltip.hidden = false;
-      tooltip.style.left = `${(px / width) * 100}%`;
-      tooltip.style.top = `${(Math.min(y(item.exposureIndex), y(item.pmIndex)) / height) * 100}%`;
       tooltip.innerHTML = `
         <strong>${escapeHtml(item.date)} · ${escapeHtml(item.period)}</strong>
         <span>Exposure: ${item.exposureIndex.toFixed(1)}</span><br>
         <span>Weighted PM₂.₅: ${item.pmIndex.toFixed(1)}</span>
       `;
+      const svgRect = svg.getBoundingClientRect();
+      positionFloatingTooltip(
+        tooltip,
+        svgRect.left + (px / width) * svgRect.width,
+        svgRect.top +
+          (Math.min(y(item.exposureIndex), y(item.pmIndex)) / height) *
+            svgRect.height,
+        "top",
+      );
       hit.setAttribute(
         "aria-label",
         `${item.date}. Exposure index ${item.exposureIndex.toFixed(1)}. Weighted PM2.5 index ${item.pmIndex.toFixed(1)}.`,
@@ -1295,6 +1350,8 @@
     constructor({ canvas, tooltip, mode }) {
       this.canvas = canvas;
       this.tooltip = tooltip;
+      this.tooltip.classList.add("is-floating");
+      document.body.appendChild(this.tooltip);
       this.mode = mode;
       this.ctx = canvas.getContext("2d", { alpha: false });
       this.zoom = 1;
@@ -1752,8 +1809,6 @@
       this.selectionPinned = pin;
       this.marker.hidden = false;
       this.marker.classList.toggle("is-pinned", pin);
-      this.updateSelectionPosition();
-      this.tooltip.hidden = false;
       const province =
         DATA.spatial.provinceNames[nearest.provinceIndex] || "Outside assigned provinces";
       if (this.mode === "lisa") {
@@ -1776,11 +1831,14 @@
           <span>SHAP: ${signed(nearest.value)}</span>
         `;
       }
+      this.tooltip.hidden = false;
+      this.updateSelectionPosition();
     }
 
     updateSelectionPosition() {
       if (!this.selectedPoint) {
         this.marker.hidden = true;
+        this.tooltip.hidden = true;
         return;
       }
       const [x, y] = this.projectProjected(
@@ -1797,8 +1855,20 @@
       this.marker.hidden = false;
       this.marker.style.left = `${x}px`;
       this.marker.style.top = `${y}px`;
-      this.tooltip.style.left = `${x}px`;
-      this.tooltip.style.top = `${y}px`;
+      const canvasRect = this.canvas.getBoundingClientRect();
+      const clientX = canvasRect.left + x;
+      const clientY = canvasRect.top + y;
+      const outsideViewport =
+        clientX < 0 ||
+        clientY < 0 ||
+        clientX > window.innerWidth ||
+        clientY > window.innerHeight;
+      if (outsideViewport) {
+        this.tooltip.hidden = true;
+        return;
+      }
+      this.tooltip.hidden = false;
+      positionFloatingTooltip(this.tooltip, clientX, clientY, "right");
     }
 
     clearSelection() {
@@ -1888,6 +1958,15 @@
       spatialMap?.resize();
       shapMap?.resize();
     });
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (trendTooltip) trendTooltip.hidden = true;
+        spatialMap?.updateSelectionPosition();
+        shapMap?.updateSelectionPosition();
+      },
+      { passive: true },
+    );
   }
 
   init();

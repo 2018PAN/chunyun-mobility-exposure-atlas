@@ -26,10 +26,6 @@ python -m http.server 8000 --bind 127.0.0.1
 Open `http://127.0.0.1:8000/`, then stop the server with `Ctrl+C` when the
 preview is complete.
 
-## GitHub Pages
-
-Publish the repository root with GitHub Pages. The atlas uses hash-based
-routes, so no server-side routing or build step is required.
 
 ## Citation
 

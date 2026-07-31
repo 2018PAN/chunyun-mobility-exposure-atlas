@@ -4159,6 +4159,15 @@ body {
   -webkit-backdrop-filter: none;
 }
 
+.chart-tooltip.is-floating,
+.map-tooltip.is-floating {
+  position: fixed;
+  z-index: 1000;
+  max-width: min(280px, calc(100vw - 24px));
+  margin: 0;
+  transform: none;
+}
+
 .card:hover,
 .map-card {
   box-shadow: var(--shadow-sm);
