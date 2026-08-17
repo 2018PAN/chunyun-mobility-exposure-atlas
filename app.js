@@ -814,7 +814,7 @@
             const barWidth = plotWidth / bins.length;
             const barHeight = (count / maxBin) * plotHeight;
             const value = low + ((index + 0.5) / bins.length) * (high - low);
-            return `<rect x="${margin.left + index * barWidth + 1}" y="${margin.top + plotHeight - barHeight}" width="${Math.max(1, barWidth - 2)}" height="${barHeight}" rx="1.5" fill="${divergingColor(value, [low, high])}"></rect>`;
+            return `<rect x="${margin.left + index * barWidth + 1}" y="${margin.top + plotHeight - barHeight}" width="${Math.max(1, barWidth - 2)}" height="${barHeight}" rx="1.5" fill="${distributionColor(value, [low, high])}"></rect>`;
           })
           .join("")}
         ${zeroX >= margin.left && zeroX <= width - margin.right ? `<line x1="${zeroX}" x2="${zeroX}" y1="${margin.top}" y2="${margin.top + plotHeight}" stroke="#334155" stroke-width="1"></line>` : ""}
@@ -1344,6 +1344,19 @@
     }
     const ratio = Math.min(1, value / Math.max(high, 1e-9));
     return mixColor("#f8fafc", "#d97706", ratio);
+  }
+
+  function distributionColor(value, extent) {
+    const [low, high] = extent;
+    if (value < 0) {
+      const distance = Math.min(
+        1,
+        Math.abs(value) / Math.max(Math.abs(low), 1e-9),
+      );
+      return mixColor("#1d4ed8", "#91afe8", distance ** 0.8);
+    }
+    const distance = Math.min(1, value / Math.max(high, 1e-9));
+    return mixColor("#b45309", "#e2ad6b", distance ** 0.8);
   }
 
   class CanvasGeoMap {
