@@ -344,6 +344,7 @@
   }
 
   function renderRoute() {
+    closeExpandedMap();
     const active = route();
     if (trendTooltip) trendTooltip.hidden = true;
     if (active !== "spatial") spatialMap?.clearSelection();
@@ -1392,7 +1393,60 @@
     }
 
     setupEvents() {
+      const touches = new Map();
+      let gesture = null;
+      let touchMoved = false;
+      const snapshot = () => {
+        const points = [...touches.values()];
+        const a = points[0], b = points[1] || a;
+        return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2,
+          distance: Math.hypot(a.x - b.x, a.y - b.y) };
+      };
       this.canvas.addEventListener("pointerdown", (event) => {
+        if (event.pointerType !== "touch") return;
+        touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        this.canvas.setPointerCapture(event.pointerId);
+        if (this.hoverFrame) cancelAnimationFrame(this.hoverFrame);
+        this.hoverFrame = null;
+        this.clearSelection();
+        touchMoved = touches.size > 1;
+        gesture = snapshot();
+      });
+      this.canvas.addEventListener("pointermove", (event) => {
+        if (event.pointerType !== "touch" || !touches.has(event.pointerId)) return;
+        touches.set(event.pointerId, { x: event.clientX, y: event.clientY });
+        const next = snapshot();
+        const dx = next.x - gesture.x, dy = next.y - gesture.y;
+        if (touches.size === 1 && !touchMoved && Math.hypot(dx, dy) < 6) return;
+        touchMoved = true;
+        const rect = this.canvas.getBoundingClientRect();
+        const oldZoom = this.zoom;
+        if (touches.size > 1 && gesture.distance > 0) {
+          this.zoom = Math.max(0.8, Math.min(8, oldZoom * next.distance / gesture.distance));
+        }
+        const ratio = this.zoom / oldZoom;
+        const cx = this.width / 2, cy = this.height / 2;
+        this.panX = next.x - rect.left - cx - (gesture.x - rect.left - cx - this.panX) * ratio;
+        this.panY = next.y - rect.top - cy - (gesture.y - rect.top - cy - this.panY) * ratio;
+        gesture = next;
+        this.draw();
+      });
+      const endTouch = (event) => {
+        if (event.pointerType !== "touch" || !touches.has(event.pointerId)) return;
+        touches.delete(event.pointerId);
+        if (touches.size) {
+          gesture = snapshot();
+          touchMoved = true;
+        } else {
+          if (!touchMoved && event.type === "pointerup") this.showNearest(event, true);
+          gesture = null;
+        }
+      };
+      this.canvas.addEventListener("pointerup", endTouch);
+      this.canvas.addEventListener("pointercancel", endTouch);
+      this.canvas.addEventListener("lostpointercapture", endTouch);
+      this.canvas.addEventListener("pointerdown", (event) => {
+        if (event.pointerType === "touch") return;
         if (this.hoverFrame) {
           cancelAnimationFrame(this.hoverFrame);
           this.hoverFrame = null;
@@ -1410,6 +1464,7 @@
         };
       });
       this.canvas.addEventListener("pointermove", (event) => {
+        if (event.pointerType === "touch") return;
         if (this.drag) {
           const deltaX = event.clientX - this.drag.x;
           const deltaY = event.clientY - this.drag.y;
@@ -1443,9 +1498,11 @@
         }
       };
       this.canvas.addEventListener("pointerup", (event) => {
+        if (event.pointerType === "touch") return;
         stopDrag(event, true);
       });
       this.canvas.addEventListener("click", (event) => {
+        if (event.pointerType === "touch" || event.sourceCapabilities?.firesTouchEvents) return;
         if (this.lastGestureWasDrag) {
           this.lastGestureWasDrag = false;
           return;
@@ -1911,11 +1968,22 @@
     });
 
     $$("[data-expand-card]").forEach((button) => {
+      button.setAttribute("aria-expanded", "false");
       button.addEventListener("click", () => {
         const card = document.getElementById(button.dataset.expandCard);
-        const expanded = card.classList.toggle("is-expanded");
-        document.body.style.overflow = expanded ? "hidden" : "";
-        button.setAttribute("aria-label", expanded ? "Exit full-screen map" : "Toggle full-screen map");
+        if (card.classList.contains("is-expanded")) { closeExpandedMap(); return; }
+        closeExpandedMap();
+        const placeholder = document.createComment("Expanded map position");
+        card.before(placeholder);
+        expandedMap = { card, placeholder, button, overflow: document.body.style.overflow };
+        document.body.appendChild(card);
+        card.classList.add("is-expanded");
+        document.body.classList.add("map-expanded");
+        document.body.style.overflow = "hidden";
+        button.setAttribute("aria-expanded", "true");
+        button.setAttribute("aria-label", "Close expanded map");
+        button.innerHTML = '<span aria-hidden="true">×</span>';
+        button.focus({ preventScroll: true });
         window.setTimeout(() => {
           if (card.id === "spatial-map-card") spatialMap?.resize();
           else shapMap?.resize();
@@ -1925,15 +1993,25 @@
 
     document.addEventListener("keydown", (event) => {
       if (event.key !== "Escape") return;
-      const expanded = $(".card.is-expanded");
-      if (!expanded) return;
-      expanded.classList.remove("is-expanded");
-      document.body.style.overflow = "";
-      window.setTimeout(() => {
-        spatialMap?.resize();
-        shapMap?.resize();
-      }, 40);
+      closeExpandedMap();
     });
+  }
+
+  let expandedMap = null;
+  function closeExpandedMap() {
+    if (!expandedMap) return;
+    const { card, placeholder, button, overflow } = expandedMap;
+    card.classList.remove("is-expanded");
+    placeholder.replaceWith(card);
+    document.body.style.overflow = overflow;
+    document.body.classList.remove("map-expanded");
+    button.setAttribute("aria-expanded", "false");
+    button.setAttribute("aria-label", "Expand map");
+    button.innerHTML = '<svg width="18" height="18"><use href="#icon-expand"></use></svg>';
+    expandedMap = null;
+    spatialMap?.resize();
+    shapMap?.resize();
+    button.focus({ preventScroll: true });
   }
 
   function setupFloatingChrome() {
@@ -1958,6 +2036,9 @@
   }
 
   function init() {
+    if (matchMedia("(pointer: coarse)").matches) {
+      $$(".map-hint").forEach((hint) => { hint.textContent = "Drag to pan · Pinch to zoom · Tap a cell"; });
+    }
     setupSegmentedControls();
     setupMapControls();
     setupFloatingChrome();

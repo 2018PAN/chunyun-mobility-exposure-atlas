@@ -596,135 +596,56 @@
           <section class="page" data-page="interpretation" aria-labelledby="interpretation-title" hidden>
             <div class="page-heading reveal">
               <div>
-                <span class="eyebrow">Methods and meaning</span>
+                <span class="eyebrow">About the analysis</span>
                 <h1 id="interpretation-title">Methods &amp; Notes</h1>
-                <p>A transparent guide to the analytical sequence, definitions, and limits behind every view.</p>
+                <p>A short guide to the study and how to read its results.</p>
               </div>
-              <a class="text-link" href="./Data/source-manifest.json">
-                Source manifest
-                <svg width="18" height="18"><use href="#icon-arrow"></use></svg>
-              </a>
             </div>
-
-            <article class="card method-flow reveal">
-              <div class="method-step">
-                <span>01</span>
-                <div><strong>Calibrate population</strong><p>Five-minute mobility observations are time-corrected and calibrated to official 2018 population totals.</p></div>
-              </div>
-              <div class="method-step">
-                <span>02</span>
-                <div><strong>Match PM₂.₅</strong><p>Hourly population and pollution are combined on a national 10 km grid to estimate exposure.</p></div>
-              </div>
-              <div class="method-step">
-                <span>03</span>
-                <div><strong>Contrast periods</strong><p>Daily values are averaged into pre-festival, festival, and post-festival periods.</p></div>
-              </div>
-              <div class="method-step">
-                <span>04</span>
-                <div><strong>Explain change</strong><p>Decomposition, Moran/LISA, machine learning, spatial CV, and SHAP reveal distinct dimensions of the pattern.</p></div>
-              </div>
-            </article>
-
-            <div class="explanation-grid method-cards">
-              <article class="card reveal">
-                <span class="method-symbol mobility-symbol">P</span>
-                <span class="eyebrow">Population</span>
-                <h2>Mobility component</h2>
-                <p><code>C₀ × (P₁ − P₀)</code></p>
-                <p>Change associated with the redistribution of population activity while baseline pollution is held constant.</p>
-              </article>
-              <article class="card reveal">
-                <span class="method-symbol pollution-symbol">C</span>
-                <span class="eyebrow">Concentration</span>
-                <h2>Pollution component</h2>
-                <p><code>P₀ × (C₁ − C₀)</code></p>
-                <p>Change associated with PM₂.₅ variation while baseline population is held constant.</p>
-              </article>
-              <article class="card reveal">
-                <span class="method-symbol interaction-symbol">P×C</span>
-                <span class="eyebrow">Joint movement</span>
-                <h2>Interaction component</h2>
-                <p><code>(P₁ − P₀) × (C₁ − C₀)</code></p>
-                <p>The residual joint effect when mobility and pollution change at the same time.</p>
-              </article>
-            </div>
-
             <div class="content-grid interpretation-grid">
-              <article class="card reveal">
-                <span class="eyebrow">Spatial statistics</span>
-                <h2>Moran’s I and LISA</h2>
-                <div class="definition-list">
-                  <div><strong>Global Moran’s I</strong><p>Measures whether similar change values cluster across neighbouring 10 km cells.</p></div>
-                  <div><strong>High–High / Low–Low</strong><p>Local clusters where a cell and its neighbours share consistently high or low values.</p></div>
-                  <div><strong>High–Low / Low–High</strong><p>Spatial outliers whose values contrast with their local neighbourhood.</p></div>
-                </div>
-              </article>
-
-              <article class="card caveat-card reveal">
-                <span class="eyebrow">Read with these boundaries</span>
-                <h2>Data and interpretation notes</h2>
-                <ul class="note-list">
-                  <li>01 February contains 16 observed hours and is retained as incomplete rather than imputed.</li>
-                  <li>Blank SHAP cells fall outside complete model support; they are not zero contributions.</li>
-                  <li>Prediction diagnostics use sampled held-out test support and are not national estimates.</li>
-                  <li>The validated boundary workflow explicitly assigns EPSG:4326 where source metadata is absent.</li>
-                  <li>Model fit and SHAP values describe predictive associations, not causal effects.</li>
-                </ul>
-              </article>
-            </div>
-
-            <div class="methods-detail-grid">
-              <article class="card reveal">
-                <span class="eyebrow">Study periods</span>
-                <h2>Three fixed analytical windows</h2>
+              <article class="card">
+                <span class="eyebrow">Study scope</span>
+                <h2>China during the 2018 Spring Festival</h2>
+                <p>Platform activity records were time-corrected, calibrated to official population totals and combined with PM₂.₅ on a national 10 km grid.</p>
                 <div class="period-definition-list">
-                  <div><strong>Pre-festival</strong><span>01–14 Feb 2018</span><em>14 days</em></div>
-                  <div><strong>Festival holiday</strong><span>15–21 Feb 2018</span><em>7 days</em></div>
-                  <div><strong>Post-festival</strong><span>22 Feb–12 Mar 2018</span><em>19 days</em></div>
+                  <div><strong>Pre-festival</strong><span>01–14 Feb</span><em>14 days</em></div>
+                  <div><strong>Festival</strong><span>15–21 Feb</span><em>7 days</em></div>
+                  <div><strong>Post-festival</strong><span>22 Feb–12 Mar</span><em>19 days</em></div>
                 </div>
-                <p class="method-footnote">All timestamps are interpreted in Beijing local time. Adjacent-period contrasts are Festival − Pre and Post − Festival.</p>
+                <p class="method-footnote">Beijing time. Comparisons show Festival − Pre-festival and Post-festival − Festival.</p>
               </article>
-
-              <article class="card reveal">
-                <span class="eyebrow">Predictive design</span>
-                <h2>Baseline and extended models</h2>
-                <div class="definition-list compact-definitions">
-                  <div><strong>B0 baseline</strong><p>Five period-specific population or pollution descriptors.</p></div>
-                  <div><strong>B1 extended</strong><p>10 predictors for component targets and 13 predictors for total exposure.</p></div>
-                  <div><strong>Validation</strong><p>A 70/30 random holdout is paired with five 300 km spatial folds.</p></div>
+              <article class="card">
+                <span class="eyebrow">Exposure change</span>
+                <h2>Population and pollution together</h2>
+                <p>Exposure load is population × PM₂.₅ concentration. Its change is exactly decomposed into three terms:</p>
+                <div class="definition-list">
+                  <div><strong>Population redistribution</strong><p>C₀ × (P₁ − P₀)</p></div>
+                  <div><strong>Pollution change</strong><p>P₀ × (C₁ − C₀)</p></div>
+                  <div><strong>Interaction</strong><p>(P₁ − P₀) × (C₁ − C₀)</p></div>
                 </div>
-              </article>
-
-              <article class="card reveal">
-                <span class="eyebrow">Evaluation metrics</span>
-                <h2>How model fit is read</h2>
-                <div class="definition-list compact-definitions">
-                  <div><strong>R²</strong><p>Explained variance; negative spatial values are worse than a fold-specific mean baseline.</p></div>
-                  <div><strong>RMSE</strong><p>Root mean squared error, with greater sensitivity to large residuals.</p></div>
-                  <div><strong>MAE</strong><p>Mean absolute error, a more robust summary of typical error magnitude.</p></div>
-                </div>
-              </article>
-
-              <article class="card reveal limitations-card">
-                <span class="eyebrow">Research limitations</span>
-                <h2>Boundaries of inference</h2>
-                <ul class="note-list">
-                  <li>Platform counts proxy population activity; they are not direct observations of migration or resident population.</li>
-                  <li>Models and SHAP use complete cases, so their support is smaller than the full descriptive grid.</li>
-                  <li>Decomposition components are mathematical constructions based on the exposure identity.</li>
-                  <li>Model performance and SHAP explain prediction, not causal mechanisms.</li>
-                  <li>Extreme urban grids can strongly influence national totals and error distributions.</li>
-                </ul>
+                <p class="method-footnote">P is estimated population; C is PM₂.₅. Subscripts 0 and 1 denote the baseline and comparison periods.</p>
               </article>
             </div>
-
-            <article class="provenance-banner reveal">
-              <svg width="22" height="22"><use href="#icon-info"></use></svg>
-              <div>
-                <strong>Reproducible static release</strong>
-                <p>Published values are aggregated research outputs generated from the formal analysis. No raw platform records or direct personal identifiers are included. The source manifest records relative paths, byte sizes, and SHA-256 hashes for provenance.</p>
-              </div>
-            </article>
+            <div class="content-grid interpretation-grid">
+              <article class="card">
+                <span class="eyebrow">Analytical tools</span>
+                <h2>Patterns, prediction and explanation</h2>
+                <div class="definition-list">
+                  <div><strong>Moran’s I &amp; LISA</strong><p>Identify spatial clustering and local outliers in grid-cell changes.</p></div>
+                  <div><strong>Random Forest &amp; XGBoost</strong><p>Compare predictive performance using a 70/30 holdout and five spatial folds built from 300 km blocks.</p></div>
+                  <div><strong>SHAP</strong><p>Shows how features contribute to predictions from the saved B1 XGBoost models.</p></div>
+                </div>
+              </article>
+              <article class="card">
+                <span class="eyebrow">Reading the results</span>
+                <h2>Three points to keep in mind</h2>
+                <ul class="note-list">
+                  <li>Population activity represents estimated presence, and exposure indicators describe groups rather than individual inhaled doses.</li>
+                  <li>Temporal gaps and incomplete model inputs limit coverage. Blank SHAP cells are outside model support, not zero contributions.</li>
+                  <li>Decomposition is an accounting identity. Model fit and SHAP describe associations, not causal effects; spatial validation tests geographic transfer.</li>
+                </ul>
+                <p class="method-footnote">Based on Chapters 3–4 and Section 7.7 of Ximing Wang’s master’s thesis (2026).</p>
+              </article>
+            </div>
           </section>
         </main>
 
