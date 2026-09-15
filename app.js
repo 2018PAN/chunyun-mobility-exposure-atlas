@@ -1422,7 +1422,7 @@
         const rect = this.canvas.getBoundingClientRect();
         const oldZoom = this.zoom;
         if (touches.size > 1 && gesture.distance > 0) {
-          this.zoom = Math.max(0.8, Math.min(8, oldZoom * next.distance / gesture.distance));
+          this.zoom = this.clampZoom(oldZoom * next.distance / gesture.distance);
         }
         const ratio = this.zoom / oldZoom;
         const cx = this.width / 2, cy = this.height / 2;
@@ -1573,9 +1573,19 @@
       this.draw();
     }
 
+    isMobileMap() {
+      return window.matchMedia("(max-width: 860px), (pointer: coarse)").matches;
+    }
+
+    clampZoom(zoom) {
+      // Keep the desktop overview range; phones need more magnification to
+      // separate original grid centres on a much narrower canvas.
+      return Math.max(0.8, Math.min(this.isMobileMap() ? 64 : 8, zoom));
+    }
+
     zoomAt(factor, x, y) {
       const oldZoom = this.zoom;
-      const newZoom = Math.max(0.8, Math.min(8, oldZoom * factor));
+      const newZoom = this.clampZoom(oldZoom * factor);
       const centerX = this.width / 2;
       const centerY = this.height / 2;
       const ratio = newZoom / oldZoom;
@@ -1923,6 +1933,14 @@
         return;
       }
       this.marker.hidden = false;
+      // This is a single grid-centre symbol, not an aggregated selection area.
+      const compactMarker = this.isMobileMap();
+      const symbolSize = this.mode === "lisa"
+        ? Math.max(1, Math.min(4.5, 1.15 * this.zoom))
+        : Math.max(1.1, Math.min(4.8, 1.35 * this.zoom));
+      this.marker.classList.toggle("is-compact", compactMarker);
+      this.marker.style.width = compactMarker ? `${symbolSize + 2}px` : "";
+      this.marker.style.height = compactMarker ? `${symbolSize + 2}px` : "";
       this.marker.style.left = `${x}px`;
       this.marker.style.top = `${y}px`;
       const canvasRect = this.canvas.getBoundingClientRect();

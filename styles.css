@@ -3708,6 +3708,18 @@ th.numeric {
   display: none;
 }
 
+/* On phones, outline the actual symbol rather than suggesting a group of cells. */
+.map-cell-marker.is-compact {
+  border-width: 1px;
+  border-radius: 1px;
+  box-shadow: 0 0 0 1px #fff;
+  transition: border-color 140ms ease;
+}
+
+.map-cell-marker.is-compact::after {
+  display: none;
+}
+
 @keyframes map-cell-pulse {
   from {
     opacity: 0.85;
